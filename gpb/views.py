@@ -1,11 +1,13 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Response
 import logging
 from logging import Formatter, FileHandler
 import os
 import requests
 import re
 import ast
+import json
 from .Parser import Parser
+from .WikiSearch import WikiSearch
 
 app = Flask(__name__)
 
@@ -25,9 +27,21 @@ def about():
     return render_template('pages/placeholder.about.html')
 
 
-@app.route('/search', methods=['POST'])
+@app.route('/search', methods=['GET'])
 def result():
-    return ""
+    parser = Parser(request.args.get('search'))
+    wikisearch = WikiSearch(parser.get_coordinate())
+    
+    if not wikisearch.query():
+        return Response(status=404, mimetype='application/json')
+
+    data = {
+        'description':  wikisearch.extract(),
+        'location': wikisearch.location
+    }
+    js = json.dumps(data)
+
+    return Response(js, status=200, mimetype='application/json')
         
 
 
