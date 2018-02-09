@@ -22,8 +22,8 @@ class ViewsTestCase(unittest.TestCase):
 
     # Testing Result Page
     def test_result(self):
-    	assert self.app.post('/search', data=dict(search="Racontre moi une histoire sur Paris")).status_code == 200
+    	assert self.app.get('/search', query_string={'search':"Racontre moi une histoire sur Paris"}).status_code == 200
 
     # Testing Result Page with random input
     def test_false_result(self):
-        assert self.app.post('/search', data=dict(search="ùpdskfgmskdgmkds")).status_code == 200
+        assert self.app.get('/search', query_string={'search':"ùpdskfgmskdgmkds"}).status_code == 404

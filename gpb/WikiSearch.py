@@ -27,6 +27,6 @@ class WikiSearch:
 	def extract(self):
 		if not self.result:
 			return None
-		url = 'https://fr.wikipedia.org/w/api.php?action=query&prop=extracts&exchars=200&explaintext&pageids={}&format=json&exlimit=1'
+		url = 'https://fr.wikipedia.org/w/api.php?action=query&prop=extracts&exchars=500&explaintext&pageids={}&format=json&exlimit=1'
 		req = requests.get(url.format(self.result['pageid']))
 		return req.json()['query']['pages'].popitem()[1]['extract']

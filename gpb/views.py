@@ -30,8 +30,15 @@ def about():
 @app.route('/search', methods=['GET'])
 def result():
     parser = Parser(request.args.get('search'))
-    wikisearch = WikiSearch(parser.get_coordinate())
+    coordinate = parser.get_coordinate()
+
+    # If Google Geosearch doesn't find anything
+    if not coordinate:
+        return Response(status=404, mimetype='application/json')
+
+    wikisearch = WikiSearch(coordinate)
     
+    # If Wikimedia doesn't find anything at this coordinate
     if not wikisearch.query():
         return Response(status=404, mimetype='application/json')
 

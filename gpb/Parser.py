@@ -16,11 +16,14 @@ class Parser:
 
 	# Return data without stopword
 	def get_essential(self): 
-		return ' '.join([word for word in self.data.split() if word not in stopwords])
+		return ' '.join([word for word in self.data.split() if word.lower() not in stopwords])
 
 	# Get Coordinate from google map API using data
 	def get_coordinate(self):
 		url = 'https://maps.google.com/maps/api/geocode/json?address={}&key={}'
 		print(self.get_essential())
 		req = requests.get(url.format(self.get_essential() , self.config['GOOGLE_MAP_GEO_API_KEY']))
-		return req.json()['results'][0]['geometry']['location']
+		if req.json()['status'] == 'ZERO_RESULTS':
+			return None
+		else:
+			return req.json()['results'][0]['geometry']['location']
