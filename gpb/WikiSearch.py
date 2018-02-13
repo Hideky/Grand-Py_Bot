@@ -18,8 +18,11 @@ class WikiSearch:
 	def query(self): 
 		url = 'https://fr.wikipedia.org/w/api.php?action=query&prop=coordinates&colimit=50&generator=geosearch&ggscoord={}|{}&ggsradius=1000&ggslimit=50&format=json'
 		req = requests.get(url.format(self.location['lat'], self.location['lng']))
+
 		if 'query' not in req.json():
 			return None
+
+		# Get first result	
 		self.result = req.json()['query']['pages'].popitem()[1]
 		return self.result
 

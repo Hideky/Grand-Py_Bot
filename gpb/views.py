@@ -28,7 +28,7 @@ def about():
 
 
 @app.route('/search', methods=['GET'])
-def result():
+def search():
     parser = Parser(request.args.get('search'))
     coordinate = parser.get_coordinate()
 
